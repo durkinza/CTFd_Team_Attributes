@@ -1,0 +1,112 @@
+{% extends "admin/base.html" %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block content %}
+
+<div id="attribute-info-modal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2 class="modal-action text-center w-100">Edit Attribute</h2>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body clearfix">
+				{% include "attribute_form.html" %}
+			</div>
+		</div>
+	</div>
+</div>
+<div id="set-team-modal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2 class="modal-action text-center w-100">Set Team Attribute</h2>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body clearfix">
+				{% include "team_attribute.html" %}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="jumbotron">
+	<div class="container">
+		<h1 id="attribute-id" class="text-center">{{ attribute.name }}</h1>
+		<div class="mb-2">
+			{% if attribute.hidden %}
+				<span class="badge badge-danger">hidden</span>
+			{% endif %}
+		</div>
+		<div class="pt-3">
+			<a class="edit-attribute">
+				<i class="btn-fa fas fa-pencil-alt fa-2x px-2" data-toggle="tooltip" data-placement="top"
+				   title="Edit Attribute"></i>
+			</a>
+			<a class="set-team">
+				<i class="btn-fa fas fa-user-plus fa-2x px-2" data-toggle="tooltip" data-placement="top"
+				   title="Set Team Attribute"></i>
+			</a>
+			<a class="delete-attribute">
+				<i class="btn-fa fas fa-trash-alt fa-2x px-2" data-toggle="tooltip" data-placement="top"
+				   title="Delete Attribute"></i>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-striped">
+				<h3 class="text-center">Team Values</h3>
+				<thead>
+				<tr>
+					<td class="text-left">Team Name</td>
+					<td class="text-center"><b>Value</b></td>
+					<td class="text-right"><b>Edit</b></td>
+				</tr>
+				</thead>
+				<tbody>
+				{% for team in teams %}
+					<tr name="{{ team.id }}" data-href="/admin/attributes/{{ attribute.id }}/{{ team.team_id }}">
+						<td class="text-left">
+							<a href="{{ url_for('admin.teams_detail', team_id=team.team_id) }}">
+								{{ team.team.name }}
+							</a>
+						</td>
+						<td class="text-center">
+							<p>
+								{{ team.value }}
+							</p>		
+						</td>
+						<td class="text-right">
+							<span class="cursor-pointer" team-id="{{ team.team_id }}"
+								  team-name="{{ team.team.name }}" data-toggle="tooltip"
+								  data-placement="top" title="Edit {{ team.team.name }}">
+								<a class="no-decoration" href="/admin/attributes/{{ attribute.id }}/{{ team.team_id }}">
+									<i class="fas fa-pencil-alt"></i>
+								</a>
+							</span>
+						</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+	var ATTRIBUTE_ID = {{ attribute.id }};
+	var ATTRIBUTE_NAME = {{ attribute.name | tojson }};
+</script>
+<script src="/plugins/CTFd_Team_Attributes/assets/js/attribute_details.js"></script>
+<script src="/plugins/CTFd_Team_Attributes/assets/js/attributes.js"></script>
+{% endblock %}

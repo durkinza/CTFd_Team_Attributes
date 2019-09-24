@@ -1,0 +1,78 @@
+{% extends "admin/base.html" %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block content %}
+
+<div class="jumbotron">
+	<div class="container">
+		<h1>Team Attributes
+			<span class="create-attribute" role="button" data-toggle="tooltip" title="Create Attribute">
+				<a href="/admin/attributes/new">
+					<i class="btn-fa fas fa-plus-circle"></i>
+				</a>
+			</span>
+		</h1>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<table id="attributesboard" class="table table-striped">
+				<thead>
+					<tr>
+						<td width="10px" class="text-center"><b>ID</b></td>
+						<td class="text-left"><b>Name</b></td>
+						<td class="text-left"><b>Type</b></td>
+						<td class="text-left"><b>Default</b></td>
+						<td class="text-center"><b>Hidden</b></td>
+					</tr>
+				</thead>
+				<tbody>
+					{% for attr in attributes %}
+					<tr name="{{ attr.id }}" data-href="/admin/attributes/{{ attr.id }}">
+						<td class="attribute-id" value="{{ attr.id }}">{{ attr.id }}</td>
+						<td class="attribute-name" value="{{ attr.name }}">
+							<a href="/admin/attributes/{{ attr.id }}">
+								{{ attr.name | truncate(32) }}
+							</a>
+						</td>	
+						<td class="attribute-type">
+							{{ attr.type }}
+						</td>	
+						<td class="attribute-default">
+							{{ attr.default | truncate(100)}}
+						</td>
+						<td class="attribute-hidden d-md-table-cell d-lg-table-cell text-center" value="{{ attr.hidden }}">
+							{% if attr.hidden %}
+								<span class="badge badge-danger">hidden</span>
+							{% endif %}
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			{% if pages > 1 %}
+				<div class="text-center">Page
+					<br>
+					{% if curr_page != 1 %}<a href="/admin/attributes?page={{ curr_page -1}}">&lt;&lt;&lt;</a> {% endif %}
+					{% for page in range(1, pages +1) %}
+						{% if curr_page != page %}
+							<a href="/admin/attributes?page={{ page }}">{{ page }}</a>
+						{% else %}
+							<b>{{ page }}</b>
+						{% endif %}
+					{% endfor %}
+					{% if curr_page != pages %}<a href="/admin/attributes?page={{ curr_page +1 }}">&gt;&gt;&gt;</a> {% endif %}
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/plugins/CTFd_Team_Attributes/assets/js/view_attributes.js"></script>
+{% endblock %}

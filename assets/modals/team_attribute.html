@@ -1,0 +1,48 @@
+<form id="set-team-form" method="POST">
+	<input type="hidden" name="id" {% if team is defined %}value="{{ team.id }}"{% endif %}>
+	<input type="hidden" name="attr_id" {% if attribute is defined %}value="{{ attribute.id }}"{% endif %}>
+	<div class="form-group">
+		{% if team is defined %}
+			<input type="hidden" name="team_id" value="{{ team.id }}">
+			<h4>{{ team.team.name }}</h4>
+		{% else %}
+		<label for="team_id">Team Name</label>
+		<select class="form-control" id="field-input" name="team_id">
+			<option></option>
+			{% for t in teams_list %}
+				<option value="{{ t.id }}">
+					{{ t.name }}
+				</option>
+			{% endfor %}
+		</select>
+		{% endif %}
+	</div>
+	<div class="form-group">
+		{% if attribute is defined %}
+			{% if attribute.type == "checkbox" %}
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="checkbox" name="value" id="value"
+					   {% if team is defined and team.value %}checked{% endif %}>
+					<label class="form-check-label" for="value">{{ attribute.name }}</label>
+				</div>
+			{% elif attribute.type == "password" %}
+				<label for="value">{{ attribute.name }}</label>
+				<input type="password" class="form-control" name="value" id="value"
+				   {% if team is defined and team.value %}value="{{ team.value }}"{% endif %}>
+			{% elif attribute.type == "textarea" %}
+				<label for="value">{{ attribute.name }}</label>
+				<textarea class="form-control" rows="5" id="value" name="value">{% if team is defined and team.value %}{{ team.value }}{% endif %}</textarea>
+			{% else %}
+				<label for="value">{{ attribute.name }}</label>
+				<input type="text" class="form-control" name="value" id="value"
+				   {% if team is defined and team.value %}value="{{ team.value }}"{% endif %}>
+			{% endif %}
+		{% endif %}
+	</div>
+	<div id="results">
+
+	</div>
+	<button id="set-team-attribute" type="submit" class="btn btn-primary btn-outlined float-right modal-action">
+		Submit
+	</button>
+</form>
