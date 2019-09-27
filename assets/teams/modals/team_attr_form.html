@@ -1,0 +1,16 @@
+<table class="table table-striped table-hover">
+	<thead>
+		<tr>
+			<td><b>Attribute</b></td>
+		</tr>
+	</thead>
+	<tbody>	
+		{% if attributes is defined %}
+		{% for attribute in attributes %}
+			<tr class="edit-attr-{{attribute.id}}">
+				<td><a>{{attribute.name}}</a></td>
+			</tr>
+		{% endfor %}
+		{% endif %}
+	</tbody>
+</table>

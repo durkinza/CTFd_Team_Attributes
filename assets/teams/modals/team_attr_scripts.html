@@ -1,0 +1,54 @@
+if (team_captain) {
+	{% if attributes is defined %}
+		{% for attribute in attributes %}
+	
+			$('.edit-attr-{{attribute.id}}').click(function () {
+	                $('#team-attr-modal-{{attribute.id}}').modal();
+	        });
+	
+		{% endfor %}
+	{% endif %}
+}
+
+{% if attributes is defined %}
+	{% for attribute in attributes %}
+		$(document).ready(function() {
+		  $("#set-team-attr-form-{{attribute.id}}").submit(function(e) {
+		    e.preventDefault();
+		    var params = $("#set-team-attr-form-{{attribute.id}}").serializeJSON(true);
+		
+		    CTFd.fetch("/api/v1/attributes/{{attribute.id}}/" + team_id, {
+		      method: "POST",
+		      credentials: "same-origin",
+		      headers: {
+		        Accept: "application/json",
+		        "Content-Type": "application/json"
+		      },
+		      body: JSON.stringify(params)
+		    })
+		      .then(function(response) {
+		        return response.json();
+		      })
+		      .then(function(response) {
+		        if (response.success) {
+		          window.location = script_root + "/team";
+		        } else {
+		          $("#set-team-attr-form-{{attribute.id}} > #results").empty();
+		          Object.keys(response.errors).forEach(function(key, index) {
+		            $("#set-team-attr-form-{{attribute.id}} > #results").append(
+		              ezbadge({
+		                type: "error",
+		                body: response.errors[key]
+		              })
+		            );
+		            var i = $("#set-team-attr-form-{{attribute.id}}").find("input[name={0}]".format(key));
+		            var input = $(i);
+		            input.addClass("input-filled-invalid");
+		            input.removeClass("input-filled-valid");
+		          });
+		        }
+		      });
+		  });
+		});
+	{% endfor %}
+{% endif %}

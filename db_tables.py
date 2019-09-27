@@ -14,6 +14,15 @@ class Attributes(db.Model):
 	default = db.Column(db.Text, default="")
 	hidden = db.Column(db.Boolean, default=False)
 	private = db.Column(db.Boolean, default=True)
+	
+	teams = db.relationship("IntersectionTeamAttr", backref="attribute", foreign_keys="IntersectionTeamAttr.attr_id")
+
+
+	def get_team_value(self, team_id):
+		intersec = IntersectionTeamAttr.query.filter_by(attr_id=self.id).filter_by(team_id=team_id)
+		if intersec.count() > 0:
+			return intersec.one()
+		return None
 
 	def __init__(self, **kwargs):
 		super(Attributes, self).__init__(**kwargs)

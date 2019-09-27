@@ -151,6 +151,12 @@ class New_Team_Attribute(Resource):
 		if "value" not in req:
 			req["value"] = ""
 
+		intersec = IntersectionTeamAttr.query.filter_by(attr_id=attr_id).filter_by(team_id=team_id)
+		if intersec.count() > 0:
+			intersec = intersec.first_or_404()
+			req["id"] = intersec.id
+
+
 		schema = IntersectionTeamAttrSchema() 
 		response = schema.load(req)
 		if response.errors:
@@ -167,8 +173,16 @@ class New_Team_Attribute(Resource):
 		if (attr.hidden) and is_admin() is False:
 			abort(404)
 
-		intersec = IntersectionTeamAttr.query.filter_by(attr_id=attr_id).filter_by(team_id=team_id).first_or_404()
 		data = request.get_json()
+
+		intersec = IntersectionTeamAttr.query.filter_by(attr_id=attr_id).filter_by(team_id=team_id)
+		if intersec.count() > 0:
+			intersec = intersec.first_or_404()
+			data["id"] = intersec.id
+		else:
+			if "id" in data:
+				del data["id"]
+
 		data["attr_id"] = attr_id
 		data["team_id"] = team_id
 
@@ -188,7 +202,6 @@ class New_Team_Attribute(Resource):
 		response = schema.load(data)
 		if response.errors:
 			return {"success": False, "errors": response.errors}, 400
-
 		response = schema.dump(response.data)
 		db.session.commit()
 		db.session.close()
