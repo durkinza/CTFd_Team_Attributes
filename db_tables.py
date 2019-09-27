@@ -13,6 +13,7 @@ class Attributes(db.Model):
 	type = db.Column(db.Text, default="checkbox")
 	default = db.Column(db.Text, default="")
 	hidden = db.Column(db.Boolean, default=False)
+	private = db.Column(db.Boolean, default=True)
 
 	def __init__(self, **kwargs):
 		super(Attributes, self).__init__(**kwargs)

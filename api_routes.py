@@ -1,9 +1,10 @@
 from flask_restplus import Namespace, Resource
-from flask import session, jsonify, request
+from flask import session, jsonify, request, abort
 
 from CTFd.cache import cache, make_cache_key
 from CTFd.utils import get_config
 from CTFd.utils.modes import get_model, TEAMS_MODE
+from CTFd.utils.user import get_current_team, authed, is_admin
 from CTFd.utils.decorators import (
     during_ctf_time_only,
 	admins_only,
@@ -19,6 +20,7 @@ from sqlalchemy.sql import or_, and_, any_
 
 from db_tables import db, Attributes, IntersectionTeamAttr
 from schemas import AttributesSchema, IntersectionTeamAttrSchema
+from views import supported_input_types
 
 attributes_namespace = Namespace('attributes', description="Endpoint to retrieve Team Attributes")
 
@@ -26,13 +28,13 @@ attributes_namespace = Namespace('attributes', description="Endpoint to retrieve
 @attributes_namespace.route('')
 class AttributeList(Resource):
 	@check_account_visibility
-	@cache.cached(timeout=60, key_prefix=make_cache_key)
 	def get(self):
-		attrs = Attributes.query.filter_by(hidden=False).all()
-
+		if is_admin():
+			attrs = Attributes.query
+		else:
+			attrs = Attributes.query.filter_by(hidden=False)
 		view = AttributesSchema.views.get(session.get("type", "user"))
-		schema = AttributesSchema(view=view)
-		response = schema.dump(Attributes)
+		response = AttributesSchema(view=view, many=True).dump(attrs)
 		if response.errors:
 			return {"success": False, "errors": response.errors}, 400
 
@@ -67,8 +69,7 @@ class Attribute(Resource):
 			abort(404)
 
 		view = AttributesSchema.views.get(session.get("type", "user"))
-		schema = AttributesSchema(view=view)
-		response = schema.dump(Attributes)
+		response = AttributesSchema(view=view).dump(attr)
 
 		if response.errors:
 			return {"success": False, "errors": response.errors}, 400
@@ -80,7 +81,6 @@ class Attribute(Resource):
 		attr = Attributes.query.filter_by(id=attr_id).first_or_404()
 		data = request.get_json()
 		data["id"] = attr_id
-
 		schema = AttributesSchema(view="admin", instance=attr, partial=True)
 
 		response = schema.load(data)
@@ -115,13 +115,23 @@ class New_Team_Attribute(Resource):
 			abort(404)
 
 		intersec = IntersectionTeamAttr.query.filter_by(attr_id=attr_id).filter_by(team_id = team_id).first_or_404()
+		if (attr.private) and is_admin() is False:
+			t = get_current_team()
+			if not( authed() and t and t.id == intersec.team_id):
+				abort(404)
 
 		view = IntersectionTeamAttrSchema.views.get(session.get("type", "user"))
-		schema = IntersectionTeamAttrSchema(view=view)
-		response = schema.dump(IntersectionTeamAttr)
+		response = IntersectionTeamAttrSchema(view=view).dump(intersec)
+
 
 		if response.errors:
 			return {"success": False, "errors": response.errors}, 400
+
+		if supported_input_types[attr.type] == "checkbox":
+			if intersec.value and intersec.value != "false":
+				response.data["value"] = True
+			else:
+				response.data["value"] = False
 
 		return {"success": True, "data": response.data}
 
@@ -152,6 +162,16 @@ class New_Team_Attribute(Resource):
 		data = request.get_json()
 		data["attr_id"] = attr_id
 		data["team_id"] = team_id
+
+		if supported_input_types[attr.type] == "checkbox":
+			if data["value"] == True:
+				data["value"]="true"
+			else:
+				data["value"]="false"
+
+		if "value" not in data:
+			data["value"] = ""
+		data["value"] = data["value"].replace('<', '&lt;').replace('>', '&gt;')
 
 		view = IntersectionTeamAttrSchema.views.get(session.get("type", "user"))
 		schema = IntersectionTeamAttrSchema(view=view)

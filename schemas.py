@@ -15,7 +15,7 @@ class AttributesSchema(ma.ModelSchema):
 		dump_only = ("id")	
 
 	views = {
-		"admin": ["id", "name", "type", "default", "hidden"],
+		"admin": ["id", "name", "type", "default", "hidden", "private"],
 		"user": ["id", "name", "type", "default"]
 	}
 	def __init__(self, view=None, *args, **kwargs):

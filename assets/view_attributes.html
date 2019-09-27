@@ -28,6 +28,7 @@
 						<td class="text-left"><b>Type</b></td>
 						<td class="text-left"><b>Default</b></td>
 						<td class="text-center"><b>Hidden</b></td>
+						<td class="text-center"><b>Private</b></td>
 					</tr>
 				</thead>
 				<tbody>
@@ -47,7 +48,12 @@
 						</td>
 						<td class="attribute-hidden d-md-table-cell d-lg-table-cell text-center" value="{{ attr.hidden }}">
 							{% if attr.hidden %}
-								<span class="badge badge-danger">hidden</span>
+								<span class="badge badge-danger">Hidden</span>
+							{% endif %}
+						</td>
+						<td class="attribute-hidden d-md-table-cell d-lg-table-cell text-center" value="{{ attr.hidden }}">
+							{% if attr.private %}
+								<span class="badge badge-info">Private</span>
 							{% endif %}
 						</td>
 					</tr>

@@ -15,7 +15,7 @@
 			<option></option>
 			{% for type_value in types.keys() %}
 				<option value="{{ type_value }}" {% if attribute is defined and attribute.type == type_value %}selected{% endif %}>
-					{{ types[type_value] }}
+					{{ type_value }}
 				</option>
 			{% endfor %}
 		</select>
@@ -24,7 +24,14 @@
 		<div class="form-check form-check-inline">
 			<input class="form-check-input" type="checkbox" name="hidden" id="hidden-checkbox"
 				   {% if attribute is defined and attribute.hidden %}checked{% endif %}>
-			<label class="form-check-label" for="hidden-checkbox">Hidden</label>
+			<label class="form-check-label" for="hidden-checkbox">Admins only (overrides Private)</label>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="form-check form-check-inline">
+			<input class="form-check-input" type="checkbox" name="private" id="private-checkbox"
+				   {% if attribute is defined and attribute.private %}checked{% endif %}>
+			<label class="form-check-label" for="private-checkbox">Private to team</label>
 		</div>
 	</div>
 	<div id="results">

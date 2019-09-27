@@ -43,6 +43,9 @@
 			{% if attribute.hidden %}
 				<span class="badge badge-danger">hidden</span>
 			{% endif %}
+			{% if attribute.private %}
+				<span class="badge badge-info">private</span>
+			{% endif %}
 		</div>
 		<div class="pt-3">
 			<a class="edit-attribute">
@@ -81,9 +84,19 @@
 							</a>
 						</td>
 						<td class="text-center">
+							{% if types[attribute.type] == "checkbox" %}
+								{% if team.value and team.value != "false" %}
+									<span class="badge badge-success">true</span>
+								{% else %}
+									<span class="badge badge-danger">false</span>
+								{% endif %}
+							{% elif types[attribute.type] == "password"%}
+								<span>{{ '*' * (team.value | truncate(10) | length) }}</span>
+							{% else %}
 							<p>
 								{{ team.value }}
-							</p>		
+							</p>	
+							{% endif %}	
 						</td>
 						<td class="text-right">
 							<span class="cursor-pointer" team-id="{{ team.team_id }}"

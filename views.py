@@ -6,10 +6,10 @@ from CTFd.models import db, Teams
 from db_tables import Attributes, IntersectionTeamAttr
 
 supported_input_types = {
-	"checkbox": "Checkbox",
-	"text": "Text",
-	"password": "Secret",
-	"textarea": "Text Area"
+	"Checkbox":"checkbox",
+	"Text":"text",
+	"Secret": "password",
+	"Text Area": "textarea"
 }
 
 # set views
@@ -30,7 +30,8 @@ def view_attributes():
 		"view_attributes.html", 
 		attributes = attributes,
 		curr_page = page,
-		pages = pages
+		pages = pages,
+		types = supported_input_types 
 	)
 
 @app.route('/admin/attributes/new', methods=['GET'])
