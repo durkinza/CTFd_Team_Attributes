@@ -7,14 +7,14 @@
 
 <div class="jumbotron">
 	<div class="container">
-		<h1>Create Attribute</h1>
+		<h1>Set Team Attribute</h1>
 	</div>
 </div>
 
 <div class="container">
 	<div class="row">
 		<div class="col-md-6 offset-md-3">
-			{% include "attribute_form.html" %}
+			{% include "team_attribute.html" %}
 		</div>
 	</div>
 </div>
@@ -23,5 +23,9 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="/plugins/CTFd_Team_Attributes/assets/js/create_attribute.js"></script>
+<script>
+	var ATTRIBUTE_ID = {{ attribute.id }};
+	var TEAM_ID = {{ team.team_id }};
+</script>
+<script src="/plugins/CTFd_Team_Attributes/assets/admin/js/set_team_attribute.js"></script>
 {% endblock %}

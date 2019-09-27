@@ -20,7 +20,7 @@ from sqlalchemy.sql import or_, and_, any_
 
 from db_tables import db, Attributes, IntersectionTeamAttr
 from schemas import AttributesSchema, IntersectionTeamAttrSchema
-from views import supported_input_types
+from admin_views import supported_input_types
 
 attributes_namespace = Namespace('attributes', description="Endpoint to retrieve Team Attributes")
 
@@ -142,6 +142,15 @@ class New_Team_Attribute(Resource):
 			abort(404)
 
 		req = request.get_json()
+		if supported_input_types[attr.type] == "checkbox":
+			if req["value"] == True:
+				req["value"]="true"
+			else:
+				req["value"]="false"
+
+		if "value" not in req:
+			req["value"] = ""
+
 		schema = IntersectionTeamAttrSchema() 
 		response = schema.load(req)
 		if response.errors:

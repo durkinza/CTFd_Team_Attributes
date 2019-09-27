@@ -12,6 +12,7 @@ supported_input_types = {
 	"Text Area": "textarea"
 }
 
+
 # set views
 @app.route('/admin/attributes', methods=['GET'])
 @admins_only
