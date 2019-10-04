@@ -3,7 +3,7 @@ from flask import render_template, request, current_app as app
 from CTFd.utils.decorators import admins_only, is_admin
 from CTFd.models import db, Teams
 
-from db_tables import Attributes, IntersectionTeamAttr
+from .db_tables import Attributes, IntersectionTeamAttr
 
 supported_input_types = {
 	"Checkbox":"checkbox",

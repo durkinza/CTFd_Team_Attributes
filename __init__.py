@@ -4,10 +4,10 @@ from flask_restplus import Api
 from CTFd.plugins import register_plugin_assets_directory, register_admin_plugin_script
 from CTFd.utils.plugins import override_template
 
-import db_tables
-import admin_views
-from team_views import view_team
-from api_routes import attributes_namespace
+from . import db_tables
+from . import admin_views
+from .team_views import view_team
+from .api_routes import attributes_namespace
 
 
 def load(app):

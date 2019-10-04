@@ -12,8 +12,8 @@ from CTFd.utils.decorators.visibility import (
 )
 from CTFd.utils.helpers import get_errors
 
-from db_tables import Attributes, IntersectionTeamAttr
-from admin_views import supported_input_types
+from .db_tables import Attributes, IntersectionTeamAttr
+from .admin_views import supported_input_types
 
 # set team view
 @app.route('/team')

@@ -18,9 +18,9 @@ from CTFd.utils.config.visibility import (
 )
 from sqlalchemy.sql import or_, and_, any_
 
-from db_tables import db, Attributes, IntersectionTeamAttr
-from schemas import AttributesSchema, IntersectionTeamAttrSchema
-from admin_views import supported_input_types
+from .db_tables import db, Attributes, IntersectionTeamAttr
+from .schemas import AttributesSchema, IntersectionTeamAttrSchema
+from .admin_views import supported_input_types
 
 attributes_namespace = Namespace('attributes', description="Endpoint to retrieve Team Attributes")
 

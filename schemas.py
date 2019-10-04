@@ -5,7 +5,7 @@ from CTFd.utils.user import is_admin, get_current_user
 from CTFd.utils import string_types
 from CTFd.models import ma
 
-from db_tables import Attributes, IntersectionTeamAttr
+from .db_tables import Attributes, IntersectionTeamAttr
 
 
 class AttributesSchema(ma.ModelSchema):
