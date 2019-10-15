@@ -144,9 +144,9 @@ class New_Team_Attribute(Resource):
 		req = request.get_json()
 		if supported_input_types[attr.type] == "checkbox":
 			if req["value"] == True:
-				req["value"]="true"
+				req["value"]="1"
 			else:
-				req["value"]="false"
+				req["value"]="0"
 
 		if "value" not in req:
 			req["value"] = ""
@@ -188,9 +188,9 @@ class New_Team_Attribute(Resource):
 
 		if supported_input_types[attr.type] == "checkbox":
 			if data["value"] == True:
-				data["value"]="true"
+				data["value"]="1"
 			else:
-				data["value"]="false"
+				data["value"]="0"
 
 		if "value" not in data:
 			data["value"] = ""

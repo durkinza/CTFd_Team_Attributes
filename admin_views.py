@@ -9,7 +9,8 @@ supported_input_types = {
 	"Checkbox":"checkbox",
 	"Text":"text",
 	"Secret": "password",
-	"Text Area": "textarea"
+	"Text Area": "textarea",
+	"Number": "number"
 }
 
 

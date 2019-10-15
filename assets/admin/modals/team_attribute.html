@@ -22,12 +22,16 @@
 			{% if types[attribute.type] == "checkbox" %}
 				<div class="form-check form-check-inline">
 					<input class="form-check-input" type="checkbox" name="value" id="value"
-					   {% if team is defined and team.value and team.value != "false" %}checked{% endif %}>
+					   {% if team is defined and team.value and team.value != "false" and team.value != "0" %}checked{% endif %}>
 					<label class="form-check-label" for="value">{{ attribute.name }}</label>
 				</div>
 			{% elif types[attribute.type] == "password" %}
 				<label for="value">{{ attribute.name }}</label>
 				<input type="password" class="form-control" name="value" id="value"
+				   {% if team is defined and team.value %}value="{{ team.value }}"{% endif %}>
+			{% elif types[attribute.type] == "number" %}
+				<label for="value">{{ attribute.name }}</label>
+				<input type="number" class="form-control" name="value" id="value"
 				   {% if team is defined and team.value %}value="{{ team.value }}"{% endif %}>
 			{% elif types[attribute.type] == "textarea" %}
 				<label for="value">{{ attribute.name }}</label>

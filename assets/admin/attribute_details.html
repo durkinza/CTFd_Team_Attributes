@@ -85,7 +85,7 @@
 						</td>
 						<td class="text-center">
 							{% if types[attribute.type] == "checkbox" %}
-								{% if team.value and team.value != "false" %}
+								{% if team.value and team.value != "false" and team.value != "0" %}
 									<span class="badge badge-success">true</span>
 								{% else %}
 									<span class="badge badge-danger">false</span>
