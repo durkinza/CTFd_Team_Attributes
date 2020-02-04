@@ -6,6 +6,7 @@ from CTFd.utils import get_config
 from CTFd.utils.modes import get_model, TEAMS_MODE
 from CTFd.utils.user import get_current_team, authed, is_admin
 from CTFd.utils.decorators import (
+	authed_only,
     during_ctf_time_only,
 	admins_only,
 	is_admin
@@ -133,12 +134,16 @@ class New_Team_Attributes(Resource):
 			else:
 				response.data["value"] = False
 		return {"success": True, "data": response.data}
-	@check_account_visibility
+
+	@authed_only
 	def post(self, attr_id, team_id):
 		attr = Attributes.query.filter_by(id=attr_id).first_or_404()
 
-		if (attr.hidden) and is_admin() is False:
-			abort(404)
+		if is_admin() is False: 
+			if (attr.hidden):
+				abort(404)
+			team = get_current_team()
+			team_id = team.id
 
 		req = request.get_json()
 		if supported_input_types[attr.type] == "checkbox":
@@ -149,6 +154,7 @@ class New_Team_Attributes(Resource):
 
 		if "value" not in req:
 			req["value"] = ""
+
 
 		intersec = IntersectionTeamAttr.query.filter_by(attr_id=attr_id).filter_by(team_id=team_id)
 		if intersec.count() > 0:
@@ -166,12 +172,15 @@ class New_Team_Attributes(Resource):
 		db.session.close()
 		return {"success": True, "data": response.data}
 
-	@check_account_visibility
+	@authed_only
 	def patch(self, attr_id, team_id):
 		attr = Attributes.query.filter_by(id=attr_id).first_or_404()
 
-		if (attr.hidden) and is_admin() is False:
-			abort(404)
+		if is_admin() is False: 
+			if (attr.hidden):
+				abort(404)
+			team = get_current_team()
+			team_id = team.id
 
 		data = request.get_json()
 
@@ -209,12 +218,15 @@ class New_Team_Attributes(Resource):
 		return {"success": True, "data": response.data}
 
 
-	@check_account_visibility
+	@authed_only
 	def delete(self, attr_id, team_id):
 		attr = Attributes.query.filter_by(id=attr_id).first_or_404()
 
-		if (attr.hidden) and is_admin() is False:
-			abort(404)
+		if is_admin() is False: 
+			if (attr.hidden):
+				abort(404)
+			team = get_current_team()
+			team_id = team.id
 
 		intersec = IntersectionTeamAttr.query.filter_by(attr_id=attr_id).filter_by(team_id=team_id).first_or_404()
 
