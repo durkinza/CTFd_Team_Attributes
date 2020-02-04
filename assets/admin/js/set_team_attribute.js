@@ -18,7 +18,7 @@ $(document).ready(function() {
       .then(function(response) {
         if (response.success) {
           var attr_id = response.data.attr_id;
-          window.location = script_root + "/admin/attributes/" + attr_id;
+          window.location = CTFd.config.urlRoot + "/admin/attributes/" + attr_id;
         } else {
           $("#set-team-form > #results").empty();
           Object.keys(response.errors).forEach(function(key, index) {

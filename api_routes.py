@@ -107,7 +107,7 @@ class Attribute(Resource):
 @attributes_namespace.route('/<int:attr_id>/<int:team_id>')
 @attributes_namespace.param("attr_id", "Attribute ID")
 @attributes_namespace.param("team_id", "Team ID")
-class New_Team_Attribute(Resource):
+class New_Team_Attributes(Resource):
 	@check_account_visibility
 	def get(self, attr_id, team_id):
 		attr = Attributes.query.filter_by(id=attr_id).first_or_404()
@@ -132,9 +132,8 @@ class New_Team_Attribute(Resource):
 				response.data["value"] = True
 			else:
 				response.data["value"] = False
-
 		return {"success": True, "data": response.data}
-
+	@check_account_visibility
 	def post(self, attr_id, team_id):
 		attr = Attributes.query.filter_by(id=attr_id).first_or_404()
 
@@ -159,14 +158,15 @@ class New_Team_Attribute(Resource):
 
 		schema = IntersectionTeamAttrSchema() 
 		response = schema.load(req)
+		db.session.add(response.data)
 		if response.errors:
 			return {"success": False, "errors": response.errors}, 400
-		db.session.add(response.data)
 		db.session.commit()
 		response = schema.dump(response.data)
 		db.session.close()
 		return {"success": True, "data": response.data}
 
+	@check_account_visibility
 	def patch(self, attr_id, team_id):
 		attr = Attributes.query.filter_by(id=attr_id).first_or_404()
 
@@ -209,6 +209,7 @@ class New_Team_Attribute(Resource):
 		return {"success": True, "data": response.data}
 
 
+	@check_account_visibility
 	def delete(self, attr_id, team_id):
 		attr = Attributes.query.filter_by(id=attr_id).first_or_404()
 

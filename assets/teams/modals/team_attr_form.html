@@ -7,7 +7,7 @@
 	<tbody>	
 		{% if attributes is defined %}
 		{% for attribute in attributes %}
-			<tr class="edit-attr-{{attribute.id}}">
+			<tr class="team-attr" data-attr-id="{{ attribute.id }}">
 				<td><a>{{attribute.name}}</a></td>
 			</tr>
 		{% endfor %}

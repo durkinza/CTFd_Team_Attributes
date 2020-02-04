@@ -34,7 +34,6 @@ def load(app):
 	# Team Modals
 	override_template('team_attr_form.html', open(os.path.join(dir_path, 'assets/teams/modals/team_attr_form.html')).read())
 	override_template('team_attr_modals.html', open(os.path.join(dir_path, 'assets/teams/modals/team_attr_modals.html')).read())
-	override_template('team_attr_scripts.html', open(os.path.join(dir_path, 'assets/teams/modals/team_attr_scripts.html')).read())
 
 
 	# Blueprint used to access the static_folder directory.
