@@ -3,6 +3,20 @@
 Adds dynamic Attributes to CTFd Teams 
 
 
+## Installing
+
+To install this plugin to your CTFd instance, clone the repo into you ctfd plugins folder.
+
+```sh
+cd <CTFd_root_folder>/CTFd/plugins/
+```
+
+```sh
+git clone git@github.com:durkinza/CTFd_Team_Attributes.git
+```
+
+Finally restart/start your CTFd instance.
+
 ## Admins interface
 
 ![Admins attributes interface](imgs/Admin-attributes-page.png)
