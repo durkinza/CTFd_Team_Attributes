@@ -22,5 +22,6 @@ pip-delete-this-directory.txt
 
 # etc.
 *swp
+*swo
 *.retry
 .ropeproject
