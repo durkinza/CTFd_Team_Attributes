@@ -31,6 +31,8 @@ Private attributes can be viewed/edited by the teams and admins, but cannot be v
 
 Public attribtues can be viewed by anyone, but can only be edited by the team and admins.
 
+Frozen attributes can only be edited by Admins, but can be viewed based on the options set above.
+
 
 ## Teams interface
 
@@ -41,6 +43,7 @@ For Private or public attributes, Teams can edit the addtribute on their team's 
 Teams can pick which attribute they want to edit
 ![Teams attributes](imgs/Teams-attributes.png)
 - notice that the hidden attribute is not shown
+- Frozen attributes will be shown as diabled forms
 
 
 Teams can submit data in the datatype of that attribute
