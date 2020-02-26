@@ -1,9 +1,8 @@
 $(document).ready(function() {
-  $("#attribute-info-form").submit(function(e) {
+  $("#attribute-select-option-form").submit(function(e) {
     e.preventDefault();
-    var params = $("#attribute-info-form").serializeJSON(true);
-
-    CTFd.fetch("/api/v1/attributes", {
+    var params = $("#attribute-select-option-form").serializeJSON(true);
+    CTFd.fetch("/api/v1/attributes/"+params['attr_id']+"/options/", {
       method: "POST",
       credentials: "same-origin",
       headers: {
@@ -17,18 +16,18 @@ $(document).ready(function() {
       })
       .then(function(response) {
         if (response.success) {
-          var team_id = response.data.id;
-          window.location = CTFd.config.urlRoot + "/admin/attributes/" + team_id;
+          var option_id = response.data.id;
+          window.location = CTFd.config.urlRoot + "/admin/attributes/" + params['attr_id'] + '/options';
         } else {
-          $("#attribute-info-form > #results").empty();
+          $("#attribute-select-option-form > #results").empty();
           Object.keys(response.errors).forEach(function(key, index) {
-            $("#attribute-info-form > #results").append(
+            $("#attribute-select-option-form > #results").append(
               CTFd.ui.ezq.ezBadge({
                 type: "error",
                 body: response.errors[key]
               })
             );
-            var i = $("#attribute-info-form").find("input[name={0}]".format(key));
+            var i = $("#attribute-select-option-form").find("input[name={0}]".format(key));
             var input = $(i);
             input.addClass("input-filled-invalid");
             input.removeClass("input-filled-valid");

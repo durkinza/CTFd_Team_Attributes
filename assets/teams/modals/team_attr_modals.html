@@ -21,23 +21,34 @@
 							{% endif %}
 							{% if types[attribute.type] == "checkbox" %}
 								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" name="value" id="value"
+									<input class="form-check-input" type="checkbox" name="value" id="value" {% if attribute.frozen %}disabled{% endif %}
 	{% if val is defined and val != "false" and val != "0" %}checked{% endif %}
 									>
 									<label class="form-check-label" for="value">{{ attribute.name }}</label>
 								</div>
 							{% elif types[attribute.type] == "password" %}
 								<label for="value">{{ attribute.name }}</label>
-								<input type="password" class="form-control" name="value" id="value"{% if val is defined %}value="{{ val }}"{% endif %}>
+								<input type="password" class="form-control" name="value" id="value" {% if attribute.frozen %}disabled{% endif %} {% if val is defined %}value="{{ val }}"{% endif %}>
+							{% elif types[attribute.type] == "select" %}
+								<label for="value">{{ attribute.name }}</label>
+								<select class="form-control" name="value" id="value" {% if attribute.frozen %}disabled{% endif %} {% if val is defined %}value="{{ val }}"{% endif %}>
+									{% for option in attribute.get_options() %}
+										{% if option.value == val %}
+											<option value="{{ option.value }}" selected >{{ option.name }}</option>
+										{% else %}
+											<option value="{{ option.value }}">{{ option.name }}</option>
+										{% endif %}
+									{% endfor %}
+								</select>
 							{% elif types[attribute.type] == "number" %}
 								<label for="value">{{ attribute.name }}</label>
-								<input type="number" class="form-control" name="value" id="value"{% if val is defined %}value="{{ val }}"{% endif %}>
+								<input type="number" class="form-control" name="value" id="value" {% if attribute.frozen %}disabled{% endif %} {% if val is defined %}value="{{ val }}"{% endif %}>
 							{% elif types[attribute.type] == "textarea" %}
 								<label for="value">{{ attribute.name }}</label>
-								<textarea class="form-control" rows="5" id="value" name="value">{% if val is defined %}{{ val }}{% endif %}</textarea>
+								<textarea class="form-control" rows="5" id="value" name="value" {% if attribute.frozen %}disabled{% endif %}>{% if val is defined %}{{ val }}{% endif %}</textarea>
 							{% else %}
 								<label for="value">{{ attribute.name }}</label>
-								<input type="text" class="form-control" name="value" id="value"
+								<input type="text" class="form-control" name="value" id="value" {% if attribute.frozen %}disabled{% endif %}
 {% if val is defined %}value="{{ val }}"{% endif %}>
 							{% endif %}
 						{% endif %}
@@ -45,7 +56,7 @@
 					<div id="results">
 				
 					</div>
-					<button id="set-team-attribute-{{ attribute.id }}" type="submit" class="btn btn-primary btn-outlined float-right modal-action">
+					<button id="set-team-attribute-{{ attribute.id }}" type="submit" class="btn btn-primary btn-outlined float-right modal-action {% if attribute.frozen %}disabled{% endif %}"{% if attribute.frozen %}disabled{% endif %}>
 						Submit
 					</button>
 				</form>

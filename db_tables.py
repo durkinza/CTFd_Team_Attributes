@@ -5,6 +5,19 @@ from CTFd.models import db, Teams
 from CTFd import utils
 
 
+class AttributesSelectOptions(db.Model):
+	__tablename__ = "attributesSelectOptions"
+	id = db.Column(db.Integer, primary_key=True)
+	attr_id = db.Column(db.Integer, db.ForeignKey("attributes.id", ondelete="CASCADE"))
+	name = db.Column(db.Text)
+	value = db.Column(db.Text)
+
+	def __init__(self, **kwargs):
+		super(AttributesSelectOptions, self).__init__(**kwargs)
+	
+	def __repr__(self):
+		return "<AttrOption id{0} attr{1}>".format(self.id, self.attr_id)
+
 class Attributes(db.Model):
 	__tablename__ = "attributes"
 
@@ -14,6 +27,7 @@ class Attributes(db.Model):
 	default = db.Column(db.Text, default="")
 	hidden = db.Column(db.Boolean, default=False)
 	private = db.Column(db.Boolean, default=True)
+	frozen = db.Column(db.Boolean, default=False)
 	
 	teams = db.relationship("IntersectionTeamAttr", backref="attribute", foreign_keys="IntersectionTeamAttr.attr_id")
 
@@ -23,6 +37,10 @@ class Attributes(db.Model):
 		if intersec.count() > 0:
 			return intersec.one()
 		return None
+
+	def get_options(self):
+		intersec = AttributesSelectOptions.query.filter_by(attr_id=self.id)
+		return intersec.all()
 
 	def __init__(self, **kwargs):
 		super(Attributes, self).__init__(**kwargs)

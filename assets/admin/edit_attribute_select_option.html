@@ -1,0 +1,27 @@
+{% extends "admin/base.html" %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block content %}
+
+<div class="jumbotron">
+	<div class="container">
+		<h1>Edit Option</h1>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-6 offset-md-3">
+			{% include "attribute_select_option_form.html" %}
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script defer src="/plugins/CTFd_Team_Attributes/assets/admin/js/edit_attribute_select_option.js"></script>
+{% endblock %}

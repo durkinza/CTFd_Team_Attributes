@@ -29,6 +29,7 @@
 						<td class="text-left"><b>Default</b></td>
 						<td class="text-center"><b>Hidden</b></td>
 						<td class="text-center"><b>Private</b></td>
+						<td class="text-center"><b>Frozen</b></td>
 					</tr>
 				</thead>
 				<tbody>
@@ -54,6 +55,11 @@
 						<td class="attribute-hidden d-md-table-cell d-lg-table-cell text-center" value="{{ attr.hidden }}">
 							{% if attr.private %}
 								<span class="badge badge-info">Private</span>
+							{% endif %}
+						</td>
+						<td class="attribute-hidden d-md-table-cell d-lg-table-cell text-center" value="{{ attr.frozen }}">
+							{% if attr.frozen %}
+								<span class="badge badge-primary">Frozen</span>
 							{% endif %}
 						</td>
 					</tr>

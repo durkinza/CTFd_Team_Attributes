@@ -19,8 +19,8 @@ from CTFd.utils.config.visibility import (
 )
 from sqlalchemy.sql import or_, and_, any_
 
-from .db_tables import db, Attributes, IntersectionTeamAttr
-from .schemas import AttributesSchema, IntersectionTeamAttrSchema
+from .db_tables import db, Attributes, IntersectionTeamAttr, AttributesSelectOptions
+from .schemas import AttributesSchema, IntersectionTeamAttrSchema, AttributesSelectOptionsSchema
 from .admin_views import supported_input_types
 
 attributes_namespace = Namespace('attributes', description="Endpoint to retrieve Team Attributes")
@@ -28,7 +28,6 @@ attributes_namespace = Namespace('attributes', description="Endpoint to retrieve
 
 @attributes_namespace.route('')
 class AttributeList(Resource):
-	@check_account_visibility
 	def get(self):
 		if is_admin():
 			attrs = Attributes.query
@@ -142,6 +141,8 @@ class New_Team_Attributes(Resource):
 		if is_admin() is False: 
 			if (attr.hidden):
 				abort(404)
+			if (attr.frozen):
+				abort(403)
 			team = get_current_team()
 			team_id = team.id
 
@@ -179,6 +180,8 @@ class New_Team_Attributes(Resource):
 		if is_admin() is False: 
 			if (attr.hidden):
 				abort(404)
+			if (attr.frozen):
+				abort(403)
 			team = get_current_team()
 			team_id = team.id
 
@@ -225,6 +228,8 @@ class New_Team_Attributes(Resource):
 		if is_admin() is False: 
 			if (attr.hidden):
 				abort(404)
+			if (attr.frozen):
+				abort(403)
 			team = get_current_team()
 			team_id = team.id
 
@@ -237,3 +242,96 @@ class New_Team_Attributes(Resource):
 		return {"success": True}
 
 
+
+
+@attributes_namespace.route('/<int:attr_id>/options/')
+@attributes_namespace.param("attr_id", "Attribute ID")
+class Attribute_options(Resource):
+	def get(self, attr_id):
+		attr = Attributes.query.filter_by(id=attr_id).first_or_404()
+		if is_admin() is False: 
+			if (attr.hidden):
+				abort(404)
+		options = attr.get_options()
+
+		if (attr.hidden) and is_admin() is False:
+			abort(404)
+
+		view = AttributesSelectOptionsSchema.views.get(session.get("type", "user"))
+		response = AttributesSelectOptionsSchema(view=view).dump(attr)
+
+		if response.errors:
+			return {"success": False, "errors": response.errors}, 400
+
+		return {"success": True, "data": response.data}
+
+	@admins_only
+	def post(self, attr_id):
+		attr = Attributes.query.filter_by(id=attr_id).first_or_404()
+		req = request.get_json()
+		req['attr_id'] = attr_id
+		req["value"] = req["value"].replace('<', '&lt;').replace('>', '&gt;')
+		schema = AttributesSelectOptionsSchema()
+		response = schema.load(req)
+		db.session.add(response.data)
+		if response.errors:
+			return {"success": False, "errors": response.errors}, 400
+		db.session.commit()
+		response = AttributesSelectOptionsSchema(view='admin').dump(response.data)
+		db.session.close()
+		return {"success": True, "data": response.data}
+
+
+@attributes_namespace.route('/<int:attr_id>/options/<int:option_id>')
+@attributes_namespace.param("attr_id", "Attribute ID")
+class attribute_option(Resource):
+	@check_account_visibility
+	def get(self, attr_id, option_id):
+		attr = Attributes.query.filter_by(id=attr_id).first_or_404()
+		if is_admin() is False: 
+			if (attr.hidden):
+				abort(404)
+		option = AttributesSelectOptions.query.filter_by(id=option_id).filter_by(attr_id=attr_id).first_or_404()
+		view = AttributesSelectOptionsSchema.views.get(session.get("type", "user"))
+		response = AttributesSelectOptionsSchema(view=view).dump(option)
+
+		if response.errors:
+			return {"success": False, "errors": response.errors}, 400
+
+		return {"success": True, "data": response.data}
+
+	@admins_only
+	def patch(self, attr_id, option_id):
+		data = request.get_json()
+
+		option = AttributesSelectOptions.query.filter_by(id=option_id).filter_by(attr_id)
+		option = option.first_or_404()
+		data["id"] = option.id
+		data["attr_id"] = attr_id
+
+		if "value" not in data:
+			data["value"] = ""
+		data["value"] = data["value"].replace('<', '&lt;').replace('>', '&gt;')
+
+		view = AttributesSelectOptionsSchema.views.get(session.get("type", "user"))
+		schema = AttributesSelectOptionsSchema(view=view)
+
+		response = schema.load(data)
+		if response.errors:
+			return {"success": False, "errors": response.errors}, 400
+		response = schema.dump(response.data)
+		db.session.commit()
+		db.session.close()
+
+		return {"success": True, "data": response.data}
+
+
+	@admins_only
+	def delete(self, attr_id, option_id):
+		option = AttributesSelectOptions.query.filter_by(id=option_id).filter_by(attr_id=attr_id).first_or_404()
+
+		db.session.delete(option)
+		db.session.commit()
+		db.session.close()
+
+		return {"success": True}

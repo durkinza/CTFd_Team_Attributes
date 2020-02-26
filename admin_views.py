@@ -3,14 +3,15 @@ from flask import render_template, request, current_app as app
 from CTFd.utils.decorators import admins_only, is_admin
 from CTFd.models import db, Teams
 
-from .db_tables import Attributes, IntersectionTeamAttr
+from .db_tables import Attributes, AttributesSelectOptions, IntersectionTeamAttr
 
 supported_input_types = {
 	"Checkbox":"checkbox",
 	"Text":"text",
 	"Secret": "password",
 	"Text Area": "textarea",
-	"Number": "number"
+	"Number": "number",
+	"Select": "select"
 }
 
 
@@ -72,5 +73,53 @@ def set_team_attribute(attribute_id, team_id):
 		'set_team_attribute.html',
 		attribute = attribute,
 		team = team,
+		types = supported_input_types 
+	)
+
+
+@app.route('/admin/attributes/<int:attribute_id>/options', methods=['GET'])
+@admins_only
+def view_attribute_options(attribute_id):
+	page = abs(request.args.get("page", 1, type=int))
+	page = abs(int(page))
+	results_per_page = 50
+	page_start = results_per_page * (page - 1)
+	page_end = results_per_page * (page - 1) + results_per_page
+	
+	attribute = Attributes.query.filter_by(id=attribute_id).first_or_404()
+	options = AttributesSelectOptions.query.filter_by(attr_id=attribute_id).all()
+	count = options.count(options)
+	pages = int(count / results_per_page) + (count % results_per_page > 0)
+
+	return render_template(
+		'view_attribute_select_options.html',
+		attribute = attribute,
+		options = options,
+		curr_page = page,
+		pages = pages,
+		types = supported_input_types 
+	)
+
+@app.route('/admin/attributes/<int:attribute_id>/options/new', methods=['GET'])
+@admins_only
+def create_attribute_options(attribute_id):
+	attribute = Attributes.query.filter_by(id=attribute_id).first_or_404()
+	
+	return render_template(
+		'create_attribute_select_option.html',
+		attribute = attribute,
+		types = supported_input_types 
+	)
+
+@app.route('/admin/attributes/<int:attribute_id>/options/<int:option_id>', methods=['GET'])
+@admins_only
+def edit_attribute_options(attribute_id, option_id):
+	attribute = Attributes.query.filter_by(id=attribute_id).first_or_404()
+	option = AttributesSelectOptions.query.filter_by(attr_id=attribute_id).filter_by(id=option_id).first_or_404()
+
+	return render_template(
+		'edit_attribute_select_option.html',
+		attribute = attribute,
+		selectOption = option,
 		types = supported_input_types 
 	)

@@ -1,0 +1,70 @@
+{% extends "admin/base.html" %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block content %}
+
+<div class="jumbotron">
+	<div class="container">
+		<h1>Attribute Select Options
+			<span class="create-attribute" role="button" data-toggle="tooltip" title="Create Option">
+				<a href="/admin/attributes/{{ attribute.id }}/options/new">
+					<i class="btn-fa fas fa-plus-circle"></i>
+				</a>
+			</span>
+		</h1>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<table id="attributesboard" class="table table-striped">
+				<thead>
+					<tr>
+						<td class="text-left"><b>Name</b></td>
+						<td class="text-left"><b>Value</b></td>
+					</tr>
+				</thead>
+				<tbody>
+					{% for option in attribute.get_options() %}
+					<tr name="{{ option.id }}" class="attr-option" data-option-id="{{ option.id }}" data-option-name="{{ option.name }}" data-href="/admin/attributes/{{ attribute.id }}/options/{{ option.id }}">
+						<td class="option-name" value="{{ option.name }}">{{ option.name }}</td>
+						<td class="option-value" value="{{ option.value }}">{{ option.value }}</td>
+						<td class="text-right">
+							<span class="cursor-pointer delete-option" id="delete-option-{{ option.id }}"
+								  data-toggle="tooltip" data-placement="top" title="Delete {{ option.name }}">
+									<i class="fas fa-trash"></i>
+							</span>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			{% if pages > 1 %}
+				<div class="text-center">Page
+					<br>
+					{% if curr_page != 1 %}<a href="/admin/attributes/{{ attribute.id }}/options?page={{ curr_page -1}}">&lt;&lt;&lt;</a> {% endif %}
+					{% for page in range(1, pages +1) %}
+						{% if curr_page != page %}
+							<a href="/admin/attributes/{{ attribute.id }}/options?page={{ page }}">{{ page }}</a>
+						{% else %}
+							<b>{{ page }}</b>
+						{% endif %}
+					{% endfor %}
+					{% if curr_page != pages %}<a href="/admin/attributes/{{ attribute.id }}/opptions?page={{ curr_page +1 }}">&gt;&gt;&gt;</a> {% endif %}
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+	var ATTRIBUTE_NAME = "{{ attribute.name }}";
+	var ATTRIBUTE_ID = "{{ attribute.id }}";
+</script>
+<script defer src="/plugins/CTFd_Team_Attributes/assets/admin/js/view_attribute_select_options.js"></script>
+{% endblock %}

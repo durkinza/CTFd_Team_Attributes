@@ -5,7 +5,26 @@ from CTFd.utils.user import is_admin, get_current_user
 from CTFd.utils import string_types
 from CTFd.models import ma
 
-from .db_tables import Attributes, IntersectionTeamAttr
+from .db_tables import Attributes, AttributesSelectOptions, IntersectionTeamAttr
+
+class AttributesSelectOptionsSchema(ma.ModelSchema):
+	class Meta:
+		model = AttributesSelectOptions
+		include_fk = True
+		dump_only = ("id")	
+
+	views = {
+		"admin": ["id", "name", "value", "attr_id"],
+		"user": ["id", "name", "value", "attr_id"]
+	}
+	def __init__(self, view=None, *args, **kwargs):
+		if view:
+			if isinstance(view, string_types):
+				kwargs["only"] = self.views[view]
+			elif isinstance(view, list):
+				kwargs["only"] = view
+
+		super(AttributesSelectOptionsSchema, self).__init__(*args, **kwargs)
 
 
 class AttributesSchema(ma.ModelSchema):
@@ -15,7 +34,7 @@ class AttributesSchema(ma.ModelSchema):
 		dump_only = ("id")	
 
 	views = {
-		"admin": ["id", "name", "type", "default", "hidden", "private"],
+		"admin": ["id", "name", "type", "default", "hidden", "private", "frozen"],
 		"user": ["id", "name", "type", "default"]
 	}
 	def __init__(self, view=None, *args, **kwargs):

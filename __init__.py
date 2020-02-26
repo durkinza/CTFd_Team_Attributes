@@ -21,10 +21,14 @@ def load(app):
 	override_template('create_attribute.html', open(os.path.join(dir_path, 'assets/admin/create_attribute.html')).read())
 	override_template('attribute_details.html', open(os.path.join(dir_path, 'assets/admin/attribute_details.html')).read())
 	override_template('set_team_attribute.html', open(os.path.join(dir_path, 'assets/admin/set_team_attribute.html')).read())
+	override_template('view_attribute_select_options.html', open(os.path.join(dir_path, 'assets/admin/view_attribute_select_options.html')).read())
+	override_template('create_attribute_select_option.html', open(os.path.join(dir_path, 'assets/admin/create_attribute_select_option.html')).read())
+	override_template('edit_attribute_select_option.html', open(os.path.join(dir_path, 'assets/admin/edit_attribute_select_option.html')).read())
 
 	# Admin Modals
 	override_template('attribute_form.html', open(os.path.join(dir_path, 'assets/admin/modals/attribute_form.html')).read())
 	override_template('team_attribute.html', open(os.path.join(dir_path, 'assets/admin/modals/team_attribute.html')).read())
+	override_template('attribute_select_option_form.html', open(os.path.join(dir_path, 'assets/admin/modals/attribute_select_option_form.html')).read())
 
 
 	# Team settings page override

@@ -1,0 +1,21 @@
+<form id="attribute-select-option-form" method="POST">
+	<input type="hidden" name="id" {% if selectOption is defined %}value="{{ selectOption.id }}"{% endif %}>
+	<input type="hidden" name="attr_id" {% if attribute is defined %}value="{{ attribute.id }}"{% endif %}>
+	<div class="form-group">
+		<label for="name">Option Name</label>
+		<input type="text" class="form-control" name="name" id="name"
+			   {% if selectOption is defined and selectOption.name %}value="{{ selectOption.name }}"{% endif %} required>
+
+	</div>
+	<div class="form-group">
+		<label for="value">Option Value</label>
+		<input type="text" class="form-control" name="value" id="value"
+			   {% if selectOption is defined and selectOption.value %}value="{{ selectOption.value }}"{% endif %} required>
+	</div>
+	<div id="results">
+
+	</div>
+	<button id="update-attribute-select-option" type="submit" class="btn btn-primary btn-outlined float-right modal-action">
+		Submit
+	</button>
+</form>

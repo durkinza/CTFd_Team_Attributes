@@ -23,7 +23,7 @@ $(document).ready(function() {
           $("#set-team-form > #results").empty();
           Object.keys(response.errors).forEach(function(key, index) {
             $("#set-team-form > #results").append(
-              ezbadge({
+              CTFd.ui.ezq.ezBadge({
                 type: "error",
                 body: response.errors[key]
               })

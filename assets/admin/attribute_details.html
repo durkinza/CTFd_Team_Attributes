@@ -56,6 +56,12 @@
 				<i class="btn-fa fas fa-user-plus fa-2x px-2" data-toggle="tooltip" data-placement="top"
 				   title="Set Team Attribute"></i>
 			</a>
+			{% if types[attribute.type] == 'select' %}
+				<a class="text-dark set-select-options" href="/admin/attributes/{{ attribute.id }}/options">
+					<i class="btn-fa fas fa-plus fa-2x px-2" data-toggle="tooltip" data-placement="top"
+					   title="Set Options"></i>
+				</a>
+			{% endif %}
 			<a class="delete-attribute">
 				<i class="btn-fa fas fa-trash-alt fa-2x px-2" data-toggle="tooltip" data-placement="top"
 				   title="Delete Attribute"></i>
