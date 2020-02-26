@@ -42,7 +42,7 @@ For Private or public attributes, Teams can edit the addtribute on their team's 
 
 Teams can pick which attribute they want to edit
 ![Teams attributes](imgs/Teams-attributes.png)
-- notice that the hidden attribute is not shown
+- Hidden attributes will not be shown
 - Frozen attributes will be shown as diabled forms
 
 
