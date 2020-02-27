@@ -2,7 +2,7 @@ $(document).ready(function() {
   $("#attribute-select-option-form").submit(function(e) {
     e.preventDefault();
     var params = $("#attribute-select-option-form").serializeJSON(true);
-    CTFd.fetch("/api/v1/attributes/"+params['attr_id']+"/options/", {
+    CTFd.fetch("/api/v1/attributes/"+params['attr_id']+"/options", {
       method: "POST",
       credentials: "same-origin",
       headers: {

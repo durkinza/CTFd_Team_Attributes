@@ -1,3 +1,4 @@
+function htmlentities(s){return s.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {return '&#'+i.charCodeAt(0)+';';});}
 $(document).ready(function(){
 	$('.edit-attr').click(function(){
 		$('#team-attr-modal').modal();
@@ -14,7 +15,7 @@ $(document).ready(function(){
 			CTFd.ui.ezq.ezQuery({
 				title: "Delete Option",
 				body: "Are you sure you want to delete {0}".format(
-					"<strong>" + option_name + "</strong>"
+					"<strong>" + htmlentities(option_name) + "</strong>"
 				),
 				success: function() {
 					CTFd.fetch("/api/v1/attributes/" + ATTRIBUTE_ID + "/options/" + option_id, {

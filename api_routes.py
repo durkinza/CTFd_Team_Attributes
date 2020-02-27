@@ -242,9 +242,63 @@ class New_Team_Attributes(Resource):
 		return {"success": True}
 
 
+@attributes_namespace.route('/teams')
+class Attribute_teams(Resource):
+	@check_account_visibility
+	def get(self):
+		if is_admin() is False:
+			attrs = IntersectionTeamAttr.query.join(Attributes).filter_by(hidden=False, private=False).all()
+		else:
+			attrs = IntersectionTeamAttr.query.all()
+
+		view = IntersectionTeamAttrSchema.views.get(session.get("type", "user"))
+		response = IntersectionTeamAttrSchema(view=view, many=True).dump(attrs)
+
+		if response.errors:
+			return {"success": False, "errors": response.errors}, 400
+		return {"success": True, "data": response.data}
 
 
-@attributes_namespace.route('/<int:attr_id>/options/')
+
+@attributes_namespace.route('/team/<int:team_id>')
+@attributes_namespace.param("team_id", "Team ID")
+class Attribute_team(Resource):
+	@check_account_visibility
+	def get(self, team_id):
+		if is_admin() is False:
+			attrs = IntersectionTeamAttr.query.join(Attributes).filter_by(hidden=False, private=False).filter(IntersectionTeamAttr.team_id==team_id).all()
+		else:
+			attrs = IntersectionTeamAttr.query.filter_by(team_id=team_id).all()
+
+		view = IntersectionTeamAttrSchema.views.get(session.get("type", "user"))
+		response = IntersectionTeamAttrSchema(view=view, many=True).dump(attrs)
+
+		if response.errors:
+			return {"success": False, "errors": response.errors}, 400
+		return {"success": True, "data": response.data}
+
+
+@attributes_namespace.route('/team/me')
+class Attribute_team(Resource):
+	@authed_only
+	def get(self):
+		team = get_current_team()
+		team_id = team.id
+		if is_admin() is False:
+			attrs = IntersectionTeamAttr.query.join(Attributes).filter_by(hidden=False).filter(IntersectionTeamAttr.team_id==team_id).all()
+		else:
+			attrs = IntersectionTeamAttr.query.filter_by(team_id=team_id).all()
+
+		view = IntersectionTeamAttrSchema.views.get(session.get("type", "user"))
+		response = IntersectionTeamAttrSchema(view=view, many=True).dump(attrs)
+
+		if response.errors:
+			return {"success": False, "errors": response.errors}, 400
+		return {"success": True, "data": response.data}
+
+
+
+@attributes_namespace.route('/<int:attr_id>/options')
 @attributes_namespace.param("attr_id", "Attribute ID")
 class Attribute_options(Resource):
 	def get(self, attr_id):
@@ -258,7 +312,7 @@ class Attribute_options(Resource):
 			abort(404)
 
 		view = AttributesSelectOptionsSchema.views.get(session.get("type", "user"))
-		response = AttributesSelectOptionsSchema(view=view).dump(attr)
+		response = AttributesSelectOptionsSchema(view=view, many=True).dump(options)
 
 		if response.errors:
 			return {"success": False, "errors": response.errors}, 400

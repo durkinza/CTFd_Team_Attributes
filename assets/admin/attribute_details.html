@@ -79,14 +79,15 @@
 					<td class="text-left">Team Name</td>
 					<td class="text-center"><b>Value</b></td>
 					<td class="text-right"><b>Edit</b></td>
+					<td class="text-right"><b>Remove</b></td>
 				</tr>
 				</thead>
 				<tbody>
 				{% for team in teams %}
-					<tr name="{{ team.id }}" data-href="/admin/attributes/{{ attribute.id }}/{{ team.team_id }}">
+					<tr name="{{ team.id }}" data-href="/admin/attributes/{{ attribute.id }}/{{ team.team_id }}" class="team-attr" data-team-attr-id="{{ team.id }}" data-team-id="{{ team.team_id }}" data-team-name="{{ team.team.name|e }}" data-attr-name="{{ attribute.name }}" data-attr-id="{{ attribute.id }}">
 						<td class="text-left">
 							<a href="{{ url_for('admin.teams_detail', team_id=team.team_id) }}">
-								{{ team.team.name }}
+								{{ team.team.name |e }}
 							</a>
 						</td>
 						<td class="text-center">
@@ -106,11 +107,17 @@
 						</td>
 						<td class="text-right">
 							<span class="cursor-pointer" team-id="{{ team.team_id }}"
-								  team-name="{{ team.team.name }}" data-toggle="tooltip"
-								  data-placement="top" title="Edit {{ team.team.name }}">
+								  team-name="{{ team.team.name|e}}" data-toggle="tooltip"
+								  data-placement="top" title="Edit {{ team.team.name|e}}">
 								<a class="no-decoration" href="/admin/attributes/{{ attribute.id }}/{{ team.team_id }}">
 									<i class="fas fa-pencil-alt"></i>
 								</a>
+							</span>
+						</td>
+						<td class="text-right">
+							<span class="cursor-pointer delete-team-attr" id="delete-team-attr-{{ team.id }}"
+								  data-toggle="tooltip" data-placement="top" title="delete {{ team.team.name|e }}'s attribute">
+									<i class="fas fa-trash"></i>
 							</span>
 						</td>
 					</tr>
