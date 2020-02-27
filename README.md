@@ -48,3 +48,33 @@ Teams can pick which attribute they want to edit
 
 Teams can submit data in the datatype of that attribute
 ![Teams edit attributes](imgs/Teams-edit-attributes.png)
+
+
+## API Endpoints
+
+There are a lot of helpful api endpoints to work with team attributes.
+- `/api/v1/attributes` ['GET', 'POST']
+  - Admins can view / create new attributes
+  - Teams can view available attributes
+- `/api/v1/attributes/<int:attr_id>` ['GET', 'PATCH', 'DELETE']
+  - Admins can view / update / remove attributes
+  - Teams can view attributes
+- `/api/v1/attributes/<int:attr_id>/<int:team_id>` ['GET', 'POST', 'PATCH', 'DELETE']
+  - Admins can view / create / update / remove a team's attributes
+  - Teams can view / create / update / remove their own attributes
+  - Teams can view other team's non-private attributes
+  - For this endpoint, the PATCH method can be used to create or update a team's attribute
+- `/api/v1/attributes/teams` ['GET']
+  - Admins can view all team's attributes
+  - Teams can view all non-private attributes
+- `/api/v1/attributes/team/<int:team_id>` ['GET']
+  - Admins can view a team's attributes
+  - Teams can view a team's non-private attributes
+- `/api/v1/attributes/team/me` ['GET']
+  - Admins and teams can view their own attributes
+- `/api/v1/attribtues/<int:attr_id>/options` ['GET', 'POST']
+  - Admins can view / create dropdown options for an attribute
+  - Teams can view the dropdown options for an attribute
+- `/api/v1/attributes/<int:attr_id>/options/<int:option_id>` ['GET', 'PATCH', 'DELETE']
+  - Admins can view / update / remove a dropdown option for an attribute
+  - Teams can view the dropdown option

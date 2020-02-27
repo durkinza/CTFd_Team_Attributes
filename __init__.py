@@ -2,11 +2,10 @@ import os
 from flask import Blueprint
 from flask_restplus import Api
 from CTFd.plugins import register_plugin_assets_directory, register_admin_plugin_script
-from CTFd.utils.plugins import override_template
+from CTFd.utils.plugins import override_template, register_script
 
 from . import db_tables
 from . import admin_views
-from .team_views import view_team
 from .api_routes import attributes_namespace
 
 
@@ -32,13 +31,7 @@ def load(app):
 
 
 	# Team settings page override
-	override_template('team_private.html', open(os.path.join(dir_path, 'assets/teams/private.html')).read())
-	app.view_functions['teams.private'] = view_team
-
-	# Team Modals
-	override_template('team_attr_form.html', open(os.path.join(dir_path, 'assets/teams/modals/team_attr_form.html')).read())
-	override_template('team_attr_modals.html', open(os.path.join(dir_path, 'assets/teams/modals/team_attr_modals.html')).read())
-
+	register_script("/plugins/CTFd_Team_Attributes/assets/teams/js/team_attr.min.js")
 
 	# Blueprint used to access the static_folder directory.
 	blueprint = Blueprint(

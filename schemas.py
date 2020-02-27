@@ -35,7 +35,7 @@ class AttributesSchema(ma.ModelSchema):
 
 	views = {
 		"admin": ["id", "name", "type", "default", "hidden", "private", "frozen"],
-		"user": ["id", "name", "type", "default"]
+		"user": ["id", "name", "type", "default", "frozen"]
 	}
 	def __init__(self, view=None, *args, **kwargs):
 		if view:

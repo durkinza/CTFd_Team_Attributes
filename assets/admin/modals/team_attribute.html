@@ -4,14 +4,14 @@
 	<div class="form-group">
 		{% if team is defined %}
 			<input type="hidden" name="team_id" value="{{ team.id }}">
-			<h4>{{ team.team.name }}</h4>
+			<h4>{{ team.team.name |e }}</h4>
 		{% else %}
 		<label for="team_id">Team Name</label>
 		<select class="form-control" id="field-input" name="team_id">
 			<option></option>
 			{% for t in teams_list %}
 				<option value="{{ t.id }}">
-					{{ t.name }}
+					{{ t.name |e}}
 				</option>
 			{% endfor %}
 		</select>
