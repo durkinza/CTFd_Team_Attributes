@@ -1,6 +1,6 @@
 import os
 from flask import Blueprint
-from flask_restplus import Api
+from flask_restx import Api
 from CTFd.plugins import register_plugin_assets_directory, register_admin_plugin_script
 from CTFd.utils.plugins import override_template, register_script
 

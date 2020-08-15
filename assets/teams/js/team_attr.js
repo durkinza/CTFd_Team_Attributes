@@ -25,7 +25,7 @@ function handle_attr_submit(form){
 		console.log(params);
 		
 		CTFd.fetch("/api/v1/attributes/"+attr_id+"/"+params.team_id, {
-			method: "POST",
+			method: "PATCH",
 			credentials: "same-origin",
 			headers: {
 				Accept: "application/json",

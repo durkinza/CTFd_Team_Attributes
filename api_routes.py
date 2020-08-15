@@ -1,4 +1,4 @@
-from flask_restplus import Namespace, Resource
+from flask_restx import Namespace, Resource
 from flask import session, jsonify, request, abort
 
 from CTFd.cache import cache, make_cache_key
@@ -144,6 +144,8 @@ class New_Team_Attributes(Resource):
 			if (attr.frozen):
 				abort(403)
 			team = get_current_team()
+			if team_id != team.id:
+				abort(403)
 			team_id = team.id
 
 		req = request.get_json()
@@ -156,18 +158,20 @@ class New_Team_Attributes(Resource):
 		if "value" not in req:
 			req["value"] = ""
 
+		schema = IntersectionTeamAttrSchema()
 
 		intersec = IntersectionTeamAttr.query.filter_by(attr_id=attr_id).filter_by(team_id=team_id)
 		if intersec.count() > 0:
 			intersec = intersec.first_or_404()
 			req["id"] = intersec.id
-
-
-		schema = IntersectionTeamAttrSchema() 
+		else:
+			if "id" in req:
+				del req["id"]
+		
 		response = schema.load(req)
-		db.session.add(response.data)
 		if response.errors:
 			return {"success": False, "errors": response.errors}, 400
+		db.session.add(response.data)
 		db.session.commit()
 		response = schema.dump(response.data)
 		db.session.close()
@@ -183,6 +187,8 @@ class New_Team_Attributes(Resource):
 			if (attr.frozen):
 				abort(403)
 			team = get_current_team()
+			if team_id != team.id:
+				abort(403)
 			team_id = team.id
 
 		data = request.get_json()
