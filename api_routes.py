@@ -81,6 +81,13 @@ class Attribute(Resource):
 		attr = Attributes.query.filter_by(id=attr_id).first_or_404()
 		data = request.get_json()
 		data["id"] = attr_id
+
+		if supported_input_types[data['type']] == "checkbox":
+			if data["default"] == True:
+				data["default"]="1"
+			else:
+				data["default"]="0"
+
 		schema = AttributesSchema(view="admin", instance=attr, partial=True)
 
 		response = schema.load(data)

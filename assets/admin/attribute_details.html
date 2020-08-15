@@ -98,7 +98,7 @@
 									<span class="badge badge-danger">false</span>
 								{% endif %}
 							{% elif types[attribute.type] == "password"%}
-								<span>{{ '*' * (team.value | truncate(10) | length) }}</span>
+								<span>*****</span>
 							{% else %}
 							<p>
 								{{ team.value }}
@@ -135,4 +135,5 @@
 </script>
 <script defer src="/plugins/CTFd_Team_Attributes/assets/admin/js/attribute_details.js"></script>
 <script defer src="/plugins/CTFd_Team_Attributes/assets/admin/js/attributes.js"></script>
+<script defer src="/plugins/CTFd_Team_Attributes/assets/admin/js/change_field.js"></script>
 {% endblock %}

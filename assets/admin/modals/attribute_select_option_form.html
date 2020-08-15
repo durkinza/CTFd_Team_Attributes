@@ -1,4 +1,7 @@
 <form id="attribute-select-option-form" method="POST">
+	{% with form = Forms.self.BaseForm() %}
+		{{ form.nonce() }}
+	{% endwith %}
 	<input type="hidden" name="id" {% if selectOption is defined %}value="{{ selectOption.id }}"{% endif %}>
 	<input type="hidden" name="attr_id" {% if attribute is defined %}value="{{ attribute.id }}"{% endif %}>
 	<div class="form-group">

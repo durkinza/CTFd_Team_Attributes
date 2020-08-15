@@ -36,5 +36,8 @@ $(document).ready(function() {
         }
       });
   });
+
+	// Update default value field on type change.
+
 });
 

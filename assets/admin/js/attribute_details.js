@@ -23,7 +23,7 @@ $(document).ready(function() {
           })
           .then(function(response) {
             if (response.success) {
-              window.location = script_root + "/admin/attributes";
+              window.location = CTFd.config.urlRoot + "/admin/attributes";
             }
           });
       }
