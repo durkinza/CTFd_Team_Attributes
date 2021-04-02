@@ -1,3 +1,6 @@
+Warning: This plugin is no longer maintained.
+Team/User attributes are now a built-in feature of CTFd.
+
 # CTFd Team Attributes
 
 Adds dynamic Attributes to CTFd Teams 
